@@ -13,6 +13,7 @@ func main() {
 
 	inputFileName := flag.String("in", "", "Input filename (ex: -in mytables.plantuml)")
 	schemaName := flag.String("s", "defaultschema", "Schema name (ex: -s mydb)")
+	inputTest := flag.Bool("noout", false, "Input test (ex: -t true)")
 	flag.Parse()
 
 	if *inputFileName == "" {
@@ -34,6 +35,10 @@ func main() {
 			log.Fatal(err)
 		}
 		arTables = append(arTables, *table)
+	}
+
+	if *inputTest == true {
+		return
 	}
 
 	sqlGenerator := &sqlgenerator.MySQLGenerator{}

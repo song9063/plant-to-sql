@@ -174,11 +174,37 @@ func (p *TableParser) MakeSQLTable(entity *PlantEntity) (*SQLTable, error) {
 		if len(arTokens) != 2 {
 			return nil, errors.New("Invalidate index format")
 		}
+
+		strIndexName := ""
 		arColNames := make([]string, 0)
-		for _, colName := range strings.Split(arTokens[1], ",") {
-			arColNames = append(arColNames, strings.TrimSpace(colName))
+		for i, colName := range strings.Split(arTokens[1], ",") {
+			strColName := strings.TrimSpace(colName)
+			if i == 0 {
+				// Retrive name of the optional Index
+				arIndexVals := strings.Split(strColName, " ")
+				if len(arIndexVals) > 1 {
+					for _, val := range arIndexVals {
+						if val != "" && strIndexName == "" {
+							strIndexName = val
+						} else if val != "" {
+							strColName = strings.TrimSpace(val)
+						}
+					}
+				}
+
+			}
+			arColNames = append(arColNames, strColName)
 		}
+
+		if strIndexName == "" {
+			// Generate a new name
+			colNamesForIndex := strings.Join(arColNames, "_")
+			strIndexName = fmt.Sprintf("IDX_%s_%s", table.Name, colNamesForIndex)
+		}
+		fmt.Println("index! ", strIndexName)
+
 		sqlIndex := SQLIndex{
+			Name:           strIndexName,
 			ColumnNames:    arColNames,
 			PlantUMLString: index,
 		}

@@ -36,6 +36,7 @@ type SQLUnique struct {
 	ColumnName string
 }
 type SQLIndex struct {
+	Name        string
 	ColumnNames []string
 
 	PlantUMLString string

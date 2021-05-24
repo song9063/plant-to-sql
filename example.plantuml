@@ -24,7 +24,7 @@ entity "posts" as p {
     *created_at: TIMESTAMP DF CURRENT_TIMESTAMP
     --
     INDEX board_settings.id
-    INDEX created_at
+    INDEX exampleIndexName created_at , users_id
 }
 
 ' CREATE TABLE IF NOT EXISTS `mydb`.`users`(

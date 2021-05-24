@@ -95,14 +95,12 @@ func (my *MySQLGenerator) makeFKSql(sqlTableName string, sqlFK plantparser.SQLFK
 }
 
 func (my *MySQLGenerator) makeIndexSQL(sqlTableName string, sqlIndex plantparser.SQLIndex) (string, error) {
-	strIndexName := "INDEX_" + sqlTableName
 	arCols := make([]string, 0)
 	for _, col := range sqlIndex.ColumnNames {
 		strCol := strings.ReplaceAll(col, ".", "_")
 		arCols = append(arCols, fmt.Sprintf("`%s`", strCol))
-		strIndexName += "_" + col
 	}
-	strSql := fmt.Sprintf("\tINDEX `%s` (%s)", strIndexName, strings.Join(arCols, ","))
+	strSql := fmt.Sprintf("\tINDEX `%s` (%s)", sqlIndex.Name, strings.Join(arCols, ","))
 	return strSql, nil
 }
 
